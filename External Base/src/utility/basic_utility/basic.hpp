@@ -7,7 +7,7 @@ namespace ellohim
 	{
 		inline int PLAYER_ID()
 		{
-			return script_global(2703660).as<int>();
+			return script_global(2703660).at(4).at(16).as<int>(); //Global_2703660
 		}
 	}
 

@@ -17,19 +17,17 @@ namespace ellohim
 		static inline bool infinite_potion{};
 		static inline bool no_clip{};
 
-		static inline float crit_damage_p{};
-		static inline float crit_damage_m{};
-		static inline float crit_damage_a{};
-		static inline float crit_damage_b{};
-		static inline float crit_damage_c{};
+		static inline char write_stat_name[64]{};
+		static inline int write_integer_value{};
+		static inline bool write_bool_value{};
+		static inline float write_float_value{};
 
-
-		static inline int physical_attack{};
-		static inline int magical_attack{};
-		static inline int physical_deff{};
-		static inline int magical_deff{};
-		static inline float item_found{};
-
+		static inline bool get_step{ false };
+		static inline char read_stat_name[64]{};
+		static inline int read_integer_value{};
+		static inline char bool_to_text[10]{};
+		static inline float read_float_value{};
+		static inline int read_bool_value{};
 
 	};
 

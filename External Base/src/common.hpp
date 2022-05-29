@@ -17,6 +17,8 @@
 #include <fstream>
 #include <map>
 
+#include <regex>
+
 #include <logger.hpp>
 
 #pragma comment(lib, "d3d9.lib")
