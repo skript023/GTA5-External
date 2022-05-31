@@ -3,15 +3,15 @@
 #include "joaat.hpp"
 #include "script_global.hpp"
 #include "address.hpp"
+#include "class_grabber.hpp"
 
 namespace ellohim::utility
 {
 	inline auto find_script_thread(rage::joaat_t scriptHash) -> uintptr_t
 	{
-		auto a = g_pointers->m_script_local;
 		for (int i = 0; i <= 52; i++)
 		{
-			auto p = g_process->read<uint64_t>(g_process->read<uint64_t>(a) + (i * 0x8));
+			auto p = g_process->read<uint64_t>(*g_pointers->m_script_local + (i * 0x8));
 			int m_stack = g_process->read<int>(p + 0xB0);
 			uint32_t m_hash = g_process->read<uint32_t>(p + 0xC);
 
@@ -27,6 +27,46 @@ namespace ellohim::utility
 	{
 		return script_global(g_global.character).as<int>();
 	}
+
+	inline uintptr_t get_player_ped(int player)
+	{
+		if (*g_pointers->m_is_session_started)
+		{
+			if (auto net_player = *g_pointers->m_network_player_mgr + 0x180 + (player * sizeof(uintptr_t)))
+			{
+				if (auto m_player_info = g_process->read<uintptr_t>(net_player) + 0xA0)
+				{
+					ExtInterface m_playerinfo(g_process->read<uintptr_t>(m_player_info), g_class->m_player_info_proxy);
+					auto ped = (uintptr_t)m_playerinfo.read(&m_playerinfo.proxy->m_ped);
+					return ped;
+				}
+			}
+		}
+		return (*g_pointers->m_ped_factory + 0x8);
+	}
+
+	inline uintptr_t get_player_info(int Player)
+	{
+		if (uintptr_t m_ped = get_player_ped(Player))
+		{
+			if (auto playerinfo = g_process->read<uintptr_t>(m_ped) + 0x10C8)
+			{
+				return playerinfo;
+			}
+		}
+		return NULL;
+	}
+
+	inline uintptr_t get_local_ped()
+	{
+		if (auto m_ped = (*g_pointers->m_ped_factory + 0x8))
+		{
+			return m_ped;
+		}
+		return NULL;
+	}
+
+	
 }
 
 namespace ellohim::memory
@@ -68,19 +108,22 @@ namespace ellohim::memory
 		_value.as(value);
 	}
 
-	inline bool is_bit_set(int _value, int _bit)
+	template <typename T>
+	inline bool is_bit_set(T _value, int _bit)
 	{
 		if ((_value >> _bit) & 1LL) return true;
 		return false;
 	}
 
-	inline int set_bit(int _value, int _bit)
+	template <typename T>
+	inline T set_bit(T _value, int _bit)
 	{
-		return _value |= 1LL << _bit;
+		return _value |= 1 << _bit;
 	}
 
-	inline int clear_bit(int _value, int _bit)
+	template <typename T>
+	inline T clear_bit(T _value, int _bit)
 	{
-		return _value &= ~(1LL << _bit);
+		return _value &= ~(1 << _bit);
 	}
 }

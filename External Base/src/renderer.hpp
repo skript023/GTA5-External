@@ -7,7 +7,6 @@ namespace ellohim
 	//extern bool ShowMenu;
 	extern bool ImGui_Initialised;
 	extern bool CreateConsole;
-	void init_overlay();
 
 	class renderer
 	{
@@ -15,11 +14,11 @@ namespace ellohim
 		explicit renderer();
 		~renderer();
 
-		void render_gui();
+		void on_present();
 		void input_handler();
 		void draw_overlay();
-		void rendering();
-		static bool dx_init();
+		void render_on_tick();
+		void init_overlay();
 		static LRESULT CALLBACK WinProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam);
 		void setup_window();
 		static DWORD WINAPI process_check(LPVOID lpParameter);

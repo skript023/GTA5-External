@@ -54,7 +54,8 @@ namespace ellohim
 			{
 				return exit_code == STATUS_PENDING;
 			}
-			else {
+			else 
+			{
 				return false;
 			}
 		}

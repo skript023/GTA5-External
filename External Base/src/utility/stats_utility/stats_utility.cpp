@@ -8,7 +8,7 @@ namespace ellohim::stats
 {
 	void stat_get_float(uint32_t Hash, float* outValue)
 	{
-		g_fiber_pool->queue_job([Hash, outValue]
+		QUEUE_JOB_BEGIN_CLAUSE(Hash, outValue)
 		{
 			if (auto freemode = utility::find_script_thread(RAGE_JOAAT("freemode")))
 			{
@@ -25,35 +25,43 @@ namespace ellohim::stats
 				
 				script_global(g_global.get_float_stat).at(37, 3).at(utility::character(), 1).as(Hash);
 			}
-		});
+		} QUEUE_JOB_END_CLAUSE
 	}
 	void stat_get_int(uint32_t Hash, int* outValue)
 	{
-		g_fiber_pool->queue_job([Hash, outValue]
+		QUEUE_JOB_BEGIN_CLAUSE(Hash, outValue)
 		{
 			script_global(g_global.get_int_stat).at(1090, 3).at(utility::character(), 1).as(Hash);
 			script_global(g_global.get_int_trigger).as(15);
 			script::get_current()->yield(std::chrono::milliseconds(1000));
 			*outValue = script_global(g_global.get_int_value).as<int>();
-		});
+		} QUEUE_JOB_END_CLAUSE
 	}
 	void stat_get_bool(uint32_t Hash, int* outValue)
 	{
-		g_fiber_pool->queue_job([Hash, outValue]
+		QUEUE_JOB_BEGIN_CLAUSE(Hash, outValue)
 		{
-			uint32_t og_hash = script_global(g_global.get_bool_stat).at(130, 3).at(utility::character(), 1).as<int>();
+			uint32_t og_hash = script_global(g_global.get_bool_stat).at(130, 3).at(utility::character(), 1).as<uint32_t>();
 			script_global(g_global.get_bool_stat).at(130, 3).at(utility::character(), 1).as(Hash);
-			script_global(g_global.get_float_trigger).as(1);
 
-			int boolean_value = script_global(g_global.player_stat).at(PLAYER::PLAYER_ID(), g_global.player_size).at(g_global.player_offset).at(49).as<int>();
-			//MISC::SET_BIT(&(Global_1853131[bVar0 /*888*/].f_205.f_49), false);
-			bool result = memory::is_bit_set(boolean_value, 0);
-			
-			*outValue = result;
+			*outValue = memory::is_bit_set(script_global(g_global.player_stat).at(PLAYER::PLAYER_ID(), g_global.player_size).at(g_global.player_offset).at(49).as<int>(), 0);//MISC::SET_BIT(&(Global_1853131[bVar0 /*888*/].f_205.f_49), false);
 
-			script::get_current()->yield(std::chrono::milliseconds(500));
+			script_global(g_global.get_bool_stat).at(130, 3).at(utility::character(), 1).as(og_hash);
+		} QUEUE_JOB_END_CLAUSE
+	}
+	bool stat_get_bool(uint32_t Hash)
+	{
+		static bool result{};
+		g_fiber_pool->queue_job([Hash]
+		{
+			uint32_t og_hash = script_global(g_global.get_bool_stat).at(130, 3).at(utility::character(), 1).as<uint32_t>();
+			script_global(g_global.get_bool_stat).at(130, 3).at(utility::character(), 1).as(Hash);
+
+			result = memory::is_bit_set(script_global(g_global.player_stat).at(PLAYER::PLAYER_ID(), g_global.player_size).at(g_global.player_offset).at(49).as<int>(), 0);//MISC::SET_BIT(&(Global_1853131[bVar0 /*888*/].f_205.f_49), false);
+
 			script_global(g_global.get_bool_stat).at(130, 3).at(utility::character(), 1).as(og_hash);
 		});
+		return result;
 	}
 	void stat_set_float(uint32_t Hash, int value)
 	{
@@ -71,7 +79,7 @@ namespace ellohim::stats
 
 			script::get_current()->yield(std::chrono::milliseconds(100));
 			script_global(g_global.get_float_stat).at(86, 3).at(mpx, 1).as<int>(Hash);
-			script_global(g_global.get_int_stat).at(819, 3).at(mpx, 1).as(rage::joaat("MP" + std::to_string(mpx) + "no_bought_yum_snacks	"));
+			script_global(g_global.get_int_stat).at(819, 3).at(mpx, 1).as(rage::joaat("MP" + std::to_string(mpx) + "no_bought_yum_snacks"));
 			script_global(g_global.get_int_stat).at(1210, 3).at(mpx, 1).as(rage::joaat("MP" + std::to_string(mpx) + "no_bought_health_snacks"));
 
 			stat_set_int(rage::joaat("MP" + std::to_string(mpx) + "no_bought_yum_snacks	"), 100);

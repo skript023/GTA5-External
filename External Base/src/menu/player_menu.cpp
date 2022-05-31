@@ -1,6 +1,7 @@
 #include "player_menu.h"
 #include "imgui.h"
 #include "utility/all.hpp"
+#include "menu_settings.hpp"
 
 namespace ellohim
 {
@@ -13,25 +14,18 @@ namespace ellohim
 
             ImGui::Text("%s", std::ctime(&date));
 
-            ImGui::Checkbox("Godmode", &godmode);
-            ImGui::SameLine(150);
-            ImGui::Checkbox("Infinite MP", &infinite_mp);
-            ImGui::SameLine(300);
-            ImGui::Checkbox("Auto Heal", &auto_heal);
+            ImGui::Checkbox("Godmode", &g_option->player.godmode);
 
-            ImGui::Checkbox("No Cooldown", &no_cooldown);
-            ImGui::SameLine(150);
-            ImGui::Checkbox("Infinite Buff", &infinite_buff);
-            ImGui::SameLine(300);
-            ImGui::Checkbox("Freeze Enemy", &freeze_enemy);
-
-            ImGui::Checkbox("One Hitkill", &one_hit);
-            ImGui::SameLine(150);
-            ImGui::Checkbox("Infinite Potion", &infinite_potion);
-            ImGui::SameLine(300);
-            ImGui::Checkbox("No Clip", &no_clip);
-
+            if (ImGui::Button("Set Max Health"))
+            {
+                player::set_player_health(PLAYER::PLAYER_ID(), 328.f);
+            }
             
+            if (ImGui::SliderInt("Wanted Level", &wanted, 0, 5))
+            {
+                player::set_player_wanted_level(PLAYER::PLAYER_ID(), wanted);
+            }
+
             if (ImGui::CollapsingHeader("Stat Editor"))
             {
                 static int e = 0;
@@ -120,8 +114,7 @@ namespace ellohim
                         stats::stat_get_int(stat_hash, &read_integer_value);
                         break;
                     case 1:
-                        stats::stat_get_bool(stat_hash, &read_bool_value);
-                        strcpy(bool_to_text, read_bool_value ? "True" : "False");
+                        strcpy(bool_to_text, stats::stat_get_bool(stat_hash) ? "True" : "False");
                         break;
                     case 2:
                         stats::stat_get_float(stat_hash, &read_float_value);

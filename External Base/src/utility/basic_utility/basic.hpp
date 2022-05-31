@@ -15,7 +15,7 @@ namespace ellohim
 	{
 		inline int GET_NETWORK_TIME()
 		{
-			return script_global(1574755).as<int>();
+			return script_global(1574755).at(11).as<int>(); //Global_1574755
 		}
 	}
 }

@@ -7,6 +7,9 @@
 #include "thread_pool.hpp"
 #include "fiber_pool.hpp"
 #include "script_mgr.hpp"
+#include "features.hpp"
+#include "utility/class_grabber.hpp"
+#include "menu_settings.hpp"
 
 //int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 
@@ -26,10 +29,6 @@ int main()
 
 	//while (!FindWindow("grcWindow", "Grand Theft Auto V"))
 		//Sleep(0);
-
-	init_overlay();
-
-	OverlayWindow::Name = "Ellohim Template";//RandomString(10).c_str();
 
 	std::cout << R"kek(
  ______      _                        _   ____                 
@@ -56,6 +55,8 @@ int main()
 	auto pointers_instance = std::make_unique<pointers>();
 	LOG(INFO) << "Pointers initialized.";
 
+	auto setting_instance = std::make_unique<menu_settings>();
+
 	auto fiber_pool_instance = std::make_unique<fiber_pool>(10);
 	LOG(INFO) << "Fiber pool initialized.";
 
@@ -65,25 +66,44 @@ int main()
 	auto thread_pool_instance = std::make_unique<thread_pool>();
 	LOG(INFO) << "Thread pool initialized.";
 
+	auto class_grabber_instance = std::make_unique<LoadClass>();
+	LOG(INFO) << "Classes initialized.";
+
 	auto renderer_instance = std::make_unique<renderer>();
 	LOG(INFO) << "Renderer Initialized.";
+
+	g_script_mgr.add_script(std::make_unique<script>(&features::script_func));
+	LOG(INFO) << "Scripts registered.";
 
 	while (g_running)
 	{
 		g_script_mgr.tick();
-		renderer::process_check(0);
-		g_renderer->rendering();
+		if (g_process->is_running())
+		{
+			g_renderer->render_on_tick();
+		}
+		else
+		{
+			g_running = false;
+		}
 
 		Sleep(0);
 	}
+
+	g_script_mgr.remove_all_scripts();
+	LOG(INFO) << "Scripts unregistered.";
+
 	renderer_instance.reset();
 	LOG(INFO) << "Renderer Uninitialized";
 
 	process_instance.reset();
-	LOG(INFO) << "Process Uninitalized.";
+	LOG(INFO) << "Process uninitalized.";
 
 	pointers_instance.reset();
-	LOG(INFO) << "Pointers Uninitialized.";
+	LOG(INFO) << "Pointers uninitialized.";
+
+	class_grabber_instance.reset();
+	LOG(INFO) << "Classes uninitialized.";
 
 	fiber_pool_instance.reset();
 	LOG(INFO) << "Fiber pool uninitialized.";
@@ -93,6 +113,8 @@ int main()
 
 	thread_pool_instance.reset();
 	LOG(INFO) << "Thread pool uninitialized.";
+
+	setting_instance.reset();
 
 	logger_instance.reset();
 	file_manager_instance.reset();

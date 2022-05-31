@@ -7,15 +7,7 @@ namespace ellohim
 	public:
 		static void render_player_tab();
 	private:
-		static inline bool godmode{};
-		static inline bool auto_heal{};
-		static inline bool infinite_mp{};
-		static inline bool no_cooldown{};
-		static inline bool infinite_buff{};
-		static inline bool freeze_enemy{};
-		static inline bool one_hit{};
-		static inline bool infinite_potion{};
-		static inline bool no_clip{};
+		static inline int wanted{};
 
 		static inline char write_stat_name[64]{};
 		static inline int write_integer_value{};
