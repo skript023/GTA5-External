@@ -23,13 +23,13 @@ namespace ellohim
 		pointer<uint64_t> m_cutscene_mgr;
 		pointer<uint64_t> m_business_money;
 		pointer<uint64_t> m_friend_list;
-		pointer<uint64_t> m_total_friend;
+		pointer<int> m_total_friend;
 		pointer<uint64_t> m_rid_joiner;
 		pointer<uint64_t> m_player_gravity;
 		pointer<uint64_t> m_nightvision;
 		pointer<uint64_t> m_thermal_vision;
-		pointer<uint64_t> m_ground_coord;
-		pointer<uint64_t> m_ground_coord_2;
+		pointer<float> m_ground_coord;
+		pointer<float> m_ground_coord_2;
 		pointer<uint64_t> m_player_crew;
 		pointer<uint64_t> m_weather;
 		pointer<uint64_t> m_waypoint;

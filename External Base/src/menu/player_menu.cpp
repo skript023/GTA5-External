@@ -20,6 +20,11 @@ namespace ellohim
             {
                 player::set_player_health(PLAYER::PLAYER_ID(), 328.f);
             }
+
+            if (ImGui::Button("Teleport to Waypoint"))
+            {
+                player::teleport_to_marker();
+            }
             
             if (ImGui::SliderInt("Wanted Level", &wanted, 0, 5))
             {

@@ -30,24 +30,22 @@ int main()
 	//while (!FindWindow("grcWindow", "Grand Theft Auto V"))
 		//Sleep(0);
 
-	std::cout << R"kek(
+	std::filesystem::path base_dir = std::getenv("appdata");
+	base_dir /= "External";
+
+	auto file_manager_instance = std::make_unique<file_manager>(base_dir);
+
+	auto logger_instance = std::make_unique<logger>("External Base", file_manager_instance->get_project_file("./External Base.log"));
+
+
+	LOG(RAW_GREEN_TO_CONSOLE) << R"kek(
  ______      _                        _   ____                 
 |  ____|    | |                      | | |  _ \                
 | |__  __  _| |_ ___ _ __ _ __   __ _| | | |_) | __ _ ___  ___ 
 |  __| \ \/ / __/ _ \ '__| '_ \ / _` | | |  _ < / _` / __|/ _ \
 | |____ >  <| ||  __/ |  | | | | (_| | | | |_) | (_| \__ \  __/
 |______/_/\_\\__\___|_|  |_| |_|\__,_|_| |____/ \__,_|___/\___|
- )kek" << std::endl;
-
-	std::filesystem::path base_dir = std::getenv("appdata");
-	base_dir /= "External";
-
-	auto file_manager_instance = std::make_unique<file_manager>(base_dir);
-
-	auto logger_instance = std::make_unique<logger>(
-		"Ellohim Template",
-		file_manager_instance->get_project_file("./cout.log")
-		);
+ )kek";
 
 	auto process_instance = std::make_unique<process>(find_game_id());
 	LOG(INFO) << "Process initalized.";

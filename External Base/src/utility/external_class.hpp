@@ -1,6 +1,7 @@
 #pragma once
 #include "memory/process.hpp"
 #include "classes/ped_factory.hpp"
+#include "utility.hpp"
 
 namespace ellohim
 {
@@ -17,6 +18,7 @@ namespace ellohim
 			this->proxy = ExtInterface;
 		}
 
+		//Return Pointer Value
 		template <typename T>
 		T read(T* var)
 		{
@@ -30,12 +32,52 @@ namespace ellohim
 			return g_process->read<T>(extAddr);
 		}
 
+		//Return Pointer
+		template <typename T>
+		uintptr_t get(T* var)
+		{
+			//resolve offset dynamically
+			uintptr_t offset = (uintptr_t)var - (uintptr_t)proxy;
+
+			//add offset to get to member variable
+			uintptr_t extAddr = g_process->read<uintptr_t>(ext) + offset;
+
+			return extAddr;
+		}
+
 		template <typename T>
 		void write(T* var, T value)
 		{
 			uintptr_t offset = (uintptr_t)var - (uintptr_t)proxy;
 			uintptr_t extAddr = g_process->read<uintptr_t>(ext) + offset;
 			g_process->write(extAddr, value);
+		}
+
+		template <typename T>
+		void set_bit(T* var, int bit)
+		{
+			uintptr_t offset = (uintptr_t)var - (uintptr_t)proxy;
+			uintptr_t extAddr = g_process->read<uintptr_t>(ext) + offset;
+			T value = g_process->read<T>(extAddr) | (1 << bit);
+			g_process->write(extAddr, value);
+		}
+
+		template <typename T>
+		void clear_bit(T* var, int bit)
+		{
+			uintptr_t offset = (uintptr_t)var - (uintptr_t)proxy;
+			uintptr_t extAddr = g_process->read<uintptr_t>(ext) + offset;
+			T value = g_process->read<T>(extAddr) & ~(1 << bit);
+			g_process->write(extAddr, value);
+		}
+
+		template <typename T>
+		bool is_bit_set(T* var, int bit)
+		{
+			uintptr_t offset = (uintptr_t)var - (uintptr_t)proxy;
+			uintptr_t extAddr = g_process->read<uintptr_t>(ext) + offset;
+			auto value = g_process->read<T>(extAddr);
+			return (value & (1 << (bit + 1))) != 0;
 		}
 	};
 

@@ -24,4 +24,8 @@
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "dwmapi.lib")
 
-inline std::atomic_bool g_running{ true };
+namespace ellohim
+{
+	using namespace std::chrono_literals;
+	inline std::atomic_bool g_running{ true };
+}

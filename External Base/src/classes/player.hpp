@@ -110,11 +110,11 @@ public:
 	char pad_0000[16]; //0x0000
 	phArcheTypeDamp* m_ph_arche; //0x0010
 	char pad_0018[8]; //0x0018
-	vector2 m_heading; //0x0020
+	rage::vector2 m_heading; //0x0020
 	char pad_0028[8]; //0x0028
-	vector3 m_rotation; //0x0030
+	rage::vector3 m_rotation; //0x0030
 	char pad_003C[20]; //0x003C
-	vector3 m_position; //0x0050
+	rage::vector3 m_position; //0x0050
 }; //Size: 0x005C
 static_assert(sizeof(CNavigation) == 0x5C);
 
@@ -165,7 +165,7 @@ public:
 	char pad_0028[72]; //0x0028
 	class CWeaponInfo* m_vehicle_weapon_info; //0x0070
 	char pad_0078[312]; //0x0078
-	vector3 m_last_impact_coords; //0x01B0
+	rage::vector3 m_last_impact_coords; //0x01B0
 }; //Size: 0x0028
 static_assert(sizeof(CPedWeaponManager) == 0x1BC, "CPedWeaponManager is not properly sized");
 
@@ -299,9 +299,9 @@ public:
 	float m_downforce_multiplier; //0x0014
 	float m_popup_light_rotation; //0x0018
 	char pad_001C[4]; //0x001C
-	vector3 m_centre_of_mass; //0x0020
+	rage::vector3 m_centre_of_mass; //0x0020
 	char pad_002C[4]; //0x002C
-	vector3 m_inertia_mult; //0x0030
+	rage::vector3 m_inertia_mult; //0x0030
 	char pad_003C[4]; //0x003C
 	float m_buoyancy; //0x0040
 	float m_drive_bias_rear; //0x0044
@@ -355,7 +355,7 @@ public:
 	float m_petrol_tank_volume; //0x0100
 	float m_oil_volume; //0x0104
 	char pad_0108[4]; //0x0108
-	vector3 m_seat_offset_dist; //0x010C
+	rage::vector3 m_seat_offset_dist; //0x010C
 	uint32_t m_monetary_value; //0x0118
 	char pad_011C[8]; //0x011C
 	uint32_t m_model_flags; //0x0124
@@ -457,7 +457,7 @@ public:
 	char pad_003A[14]; //0x003A
 	class CEntityDrawHandler* m_vehicle_draw; //0x0048
 	char pad_0050[64]; //0x0050
-	vector3 m_entity_position; //0x0090
+	rage::vector3 m_entity_position; //0x0090
 	char pad_009C[52]; //0x009C
 	class netObject* m_net_object; //0x00D0
 	char pad_00D8[176]; //0x00D8
@@ -498,7 +498,9 @@ public:
 	int8_t m_vehicle_headlight; //0x0948
 	int8_t m_turn_light; //0x0949
 	int8_t m_vehicle_engine; //0x094A
-	char pad_094B[105]; //0x094B
+	char pad_094B[5]; //0x094B
+	int32_t	m_stop_vehicle; //0x950
+	char pad_0954[96]; //0x0954
 	float m_vehicle_turning; //0x09B4
 	char pad_09B8[4]; //0x09B8
 	float m_vehicle_forward; //0x09BC
@@ -578,7 +580,7 @@ public:
 	char pad_021C[28]; //0x021C
 	uint32_t m_player_controls; //0x0238
 	char pad_023C[196]; //0x023C
-	vector3 m_last_aimed_coords; //0x0300
+	rage::vector3 m_last_aimed_coords; //0x0300
 	char pad_030C[1072]; //0x030C
 	float m_wanted_can_change; //0x073C
 	char pad_0740[304]; //0x0740

@@ -1,5 +1,6 @@
 #pragma once
 #include "common.hpp"
+#include "utility/vector.hpp"
 
 namespace ellohim
 {
@@ -106,6 +107,21 @@ namespace ellohim
 			T out{};
 			read_raw(base, sizeof(T), &out);
 			return out;
+		}
+
+		rage::vector3 read_vector3(uintptr_t base)
+		{
+			float first = read<float>(base);
+			float second = read<float>(base + 0x4);
+			float third = read<float>(base + 0x8);
+			return rage::vector3(first, second, third);
+		}
+
+		rage::vector2 read_vector2(uintptr_t base)
+		{
+			float first = read<float>(base);
+			float second = read<float>(base + 0x4);
+			return rage::vector2(first, second);
 		}
 
 		template <typename T>

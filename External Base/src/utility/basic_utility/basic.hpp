@@ -9,6 +9,11 @@ namespace ellohim
 		{
 			return script_global(2703660).at(4).at(16).as<int>(); //Global_2703660
 		}
+
+		inline uintptr_t PLAYER_PED_ID()
+		{
+			return ((*g_pointers->m_ped_factory) + 0x8);
+		}
 	}
 
 	namespace NETWORK

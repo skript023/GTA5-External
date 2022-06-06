@@ -119,7 +119,7 @@ public:
 	char pad_02A4[4]; //0x02A4
 	void* m_attackers; //0x02A8
 	char pad_02B0[112]; //0x02B0
-	vector3 m_velocity; //0x0320
+	rage::vector3 m_velocity; //0x0320
 	char pad_032C[2564]; //0x032C
 	class CVehicle* m_last_vehicle; //0x0D30
 	char pad_0D38[282]; //0x0D38
@@ -140,6 +140,7 @@ public:
 	int m_ped_task; //ox146D
 	char pad_1471[191]; //0x1471
 	float m_armor; //0x1530
+
 };	//Size: 0x14E4
 static_assert(sizeof(CPed) == 0x1534, "CPed is not properly sized");
 #pragma pack(pop)
@@ -148,7 +149,7 @@ class CPedFactory
 {
 public:
 	virtual ~CPedFactory() = default;
-	CPed *m_local_ped;
+	class CPed *m_local_ped;
 };
 
 class PresenceData

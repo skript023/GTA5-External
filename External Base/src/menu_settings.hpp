@@ -6,12 +6,13 @@ namespace ellohim
 	inline menu_settings* g_option{};
 
 	class menu_settings
-	{struct player_option
+	{
+		struct player_option
 		{
 			bool godmode = false;
 		};
 	public:
-		menu_settings()
+		explicit menu_settings()
 		{
 			g_option = this;
 		}

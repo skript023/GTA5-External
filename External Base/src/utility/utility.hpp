@@ -32,17 +32,21 @@ namespace ellohim::utility
 	{
 		if (*g_pointers->m_is_session_started)
 		{
-			if (auto net_player = *g_pointers->m_network_player_mgr + 0x180 + (player * sizeof(uintptr_t)))
+			auto net_player = (*g_pointers->m_network_player_mgr + 0x180) + (player * sizeof(uintptr_t));
+			if (g_process->read<uintptr_t>(net_player))
 			{
 				if (auto m_player_info = g_process->read<uintptr_t>(net_player) + 0xA0)
 				{
-					ExtInterface m_playerinfo(g_process->read<uintptr_t>(m_player_info), g_class->m_player_info_proxy);
-					auto ped = (uintptr_t)m_playerinfo.read(&m_playerinfo.proxy->m_ped);
+					auto ped = g_process->read<uintptr_t>(m_player_info) + 0x1E8;
 					return ped;
 				}
 			}
 		}
-		return (*g_pointers->m_ped_factory + 0x8);
+		else if (!*g_pointers->m_is_session_started)
+		{
+			return (*g_pointers->m_ped_factory + 0x8);
+		}
+		return NULL;
 	}
 
 	inline uintptr_t get_player_info(int Player)
@@ -66,7 +70,10 @@ namespace ellohim::utility
 		return NULL;
 	}
 
-	
+	inline bool is_float_equal(float a, float b, float epsilon = FLT_EPSILON)
+	{
+		return (fabs(a - b) <= epsilon * std::max(fabs(a), fabs(b)));
+	}
 }
 
 namespace ellohim::memory

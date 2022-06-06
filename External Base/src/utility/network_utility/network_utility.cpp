@@ -26,6 +26,7 @@ namespace ellohim::network
 			break;
 		}
 	}
+
 	void instant_nano_drone()
 	{
 		QUEUE_JOB_BEGIN_CLAUSE()
@@ -41,6 +42,7 @@ namespace ellohim::network
 			memory::clear_bit(addr_drone, 23);
 		} QUEUE_JOB_END_CLAUSE
 	}
+
 	void no_idle_kick(bool activation)
 	{
 		if (activation)
@@ -58,6 +60,7 @@ namespace ellohim::network
 			script_global(262145).at(90).as(900000);
 		}
 	}
+
 	void select_character()
 	{
 		script_global(g_global.session_unk_1).as(0);
@@ -66,12 +69,14 @@ namespace ellohim::network
 		script_global(g_global.session_unk_2).as(1);
 		script_global(g_global.session_unk_3).as(4);
 	}
+
 	void creator_mode()
 	{
 		script_global(g_global.session_unk_1).as(2);
 		script_global(g_global.session_change).as(2);
 		script_global(g_global.session_change).as(1);
 	}
+
 	void off_the_radar(bool activate)
 	{
 		if (activate && *g_pointers->m_is_session_started)
