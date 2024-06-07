@@ -102,28 +102,12 @@ namespace ellohim
 
 		template <typename T>
 		inline T read(uintptr_t base)
-			requires(std::is_scalar_v<T>)
 		{
 			T out{};
 			read_raw(base, sizeof(T), &out);
 			return out;
 		}
-
-		rage::vector3 read_vector3(uintptr_t base)
-		{
-			float first = read<float>(base);
-			float second = read<float>(base + 0x4);
-			float third = read<float>(base + 0x8);
-			return rage::vector3(first, second, third);
-		}
-
-		rage::vector2 read_vector2(uintptr_t base)
-		{
-			float first = read<float>(base);
-			float second = read<float>(base + 0x4);
-			return rage::vector2(first, second);
-		}
-
+		
 		template <typename T>
 		inline void write(uintptr_t base, const T& ref) 
 		{

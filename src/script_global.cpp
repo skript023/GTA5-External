@@ -21,6 +21,6 @@ namespace ellohim
 
 	uintptr_t script_global::get()
 	{
-		return g_process->read<uint64_t>(g_pointers->m_script_globals + ((m_index >> 0x12 & 0x3F) * sizeof(uintptr_t*))) + ((m_index & 0x3FFFF) * sizeof(uintptr_t*));
+		return g_pointers->m_script_globals[m_index >> 0x12 & 0x3F] + (m_index & 0x3FFFF);
 	}
 }

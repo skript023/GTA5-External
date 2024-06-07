@@ -137,7 +137,7 @@ namespace ellohim
 			TempRect.left = TempPoint.x;
 			TempRect.top = TempPoint.y;
 			ImGuiIO& io = ImGui::GetIO();
-			io.ImeWindowHandle = Process::Hwnd;
+			// io.ImeWindowHandle = Process::Hwnd;
 
 			if (TempRect.left != OldRect.left || TempRect.right != OldRect.right || TempRect.top != OldRect.top || TempRect.bottom != OldRect.bottom)
 			{
@@ -296,6 +296,8 @@ namespace ellohim
 				exit(0);
 			}
 		}
+
+		return EXIT_FAILURE;
 	}
 
 	void renderer::init_overlay()

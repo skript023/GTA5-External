@@ -16,7 +16,7 @@ namespace ellohim
 			name(name)
 		{
 			compile(x);
-			//LOG(INFO) << name << " Found";
+			LOG(INFO) << name << " Found";
 			scan();
 		}
 

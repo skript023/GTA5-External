@@ -54,7 +54,7 @@ namespace ellohim::player
 				if (icon_id == BlipID && BlipColor == NULL) BlipColor = color_id;
 				if (icon_id == BlipID && color_id == BlipColor)
 				{
-					return g_process->read_vector3(ptr + 0x10);;
+					return g_process->read<rage::vector3>(ptr + 0x10);
 				}
 			}
 		}
@@ -116,7 +116,7 @@ namespace ellohim::player
 	{
 		g_fiber_pool->queue_job([] {
 			float Heights[]{ 200.0f, 150.0f, 100.0f, 50.0f, 1050.0f, 900.0f, 850.0f, 800.0f, 750.0f, 700.0f, 650.0f, 600.0f, 550.0f, 500.0f, 450.0f, 400.0f, 350.0f, 300.0f, 250.0f, 0.0f };
-			rage::vector2 v2 = g_process->read_vector2(g_pointers->m_waypoint_2);
+			rage::vector2 v2 = g_process->read<rage::vector2>(g_pointers->m_waypoint_2);
 			float high = 1100.0f;
 			float ground = 0.0f;
 
@@ -134,22 +134,21 @@ namespace ellohim::player
 				LOG(INFO) << "Begin Ground : " << *g_pointers->m_ground_coord;
 				if (!utility::is_float_equal(*g_pointers->m_ground_coord, 0.0f))
 				{
-					g_fiber_pool->queue_job([=] {
-						for (int j = 0; j <= _ARRAYSIZE(Heights); j++)
+					for (int j = 0; j <= _ARRAYSIZE(Heights); j++)
+					{
+						if (!utility::is_float_equal(*g_pointers->m_ground_coord, 0.0f))
 						{
-							if (!utility::is_float_equal(*g_pointers->m_ground_coord, 0.0f))
-							{
-								set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, *g_pointers->m_ground_coord + 1.2f });
-								LOG(INFO) << "Ground : " << *g_pointers->m_ground_coord;
-							}
-							else
-							{
-								set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, Heights[j] });
-								LOG(INFO) << "Search Z Coords";
-							}
-							script::get_current()->yield();
+							set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, *g_pointers->m_ground_coord + 1.2f });
+							LOG(INFO) << "Ground : " << *g_pointers->m_ground_coord;
 						}
-					});
+						else
+						{
+							set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, Heights[j] });
+							LOG(INFO) << "Search Z Coords";
+						}
+						script::get_current()->yield();
+					}
+
 					set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, *g_pointers->m_ground_coord + 1.2f });
 					LOG(INFO) << "Finished";
 					break;

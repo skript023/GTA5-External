@@ -1,5 +1,5 @@
 #pragma once
-#include "pointers.hpp""
+#include "pointers.hpp"
 #include "joaat.hpp"
 #include "script_global.hpp"
 #include "address.hpp"
