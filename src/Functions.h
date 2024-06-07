@@ -7,6 +7,9 @@ namespace ellohim::functions
 	{
 		PROCESSENTRY32 pt;
 		HANDLE hsnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+		if (hsnap == INVALID_HANDLE_VALUE)
+			return 0;
+
 		pt.dwSize = sizeof(PROCESSENTRY32);
 		if (Process32First(hsnap, &pt)) 
 		{

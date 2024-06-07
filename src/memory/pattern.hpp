@@ -15,9 +15,16 @@ namespace ellohim
 		inline pattern(std::string name, std::string x) :
 			name(name)
 		{
-			compile(x);
-			LOG(INFO) << name << " Found";
-			scan();
+			try
+			{
+				compile(x);
+				scan();
+				LOG(INFO) << name << " Found";
+			}
+			catch(const std::exception& e)
+			{
+				LOG(WARNING) << name << " not found";
+			}
 		}
 
 		inline pattern(std::string name_, uintptr_t addr)

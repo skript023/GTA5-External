@@ -1,6 +1,12 @@
 #pragma once
 #include "memory/process.hpp"
 #include "classes/ped_factory.hpp"
+#include "classes/business_info.hpp"
+#include "classes/friend_registry.hpp"
+#include "classes/game_setting.hpp"
+#include "classes/hash_table.hpp"
+#include "classes/player_crew.hpp"
+#include "classes/custscene_manager.hpp"
 #include "utility.hpp"
 
 namespace ellohim

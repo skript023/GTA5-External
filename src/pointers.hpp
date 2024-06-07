@@ -41,18 +41,19 @@ namespace ellohim
 		pointer<uint64_t> m_is_dlc_present;
 		pointer<uint64_t> m_posix_time;
 		pointer<uint64_t> m_frame_count;
-		pointer<uint64_t> m_player_name_esp;
-		pointer<uint64_t> m_player_name_display;
+		// pointer<uint64_t> m_player_name_esp;
+		// pointer<uint64_t> m_player_name_display;
 		pointer<uint64_t> m_label_text;
 		pointer<uint64_t> m_sound_loudness;
 		pointer<uint64_t> m_hash_table;
-		pointer<uint64_t> original_rid;
+		// pointer<uint64_t> original_rid;
 		pointer<uint64_t> m_ped_aim;
-		pointer<uint64_t> explosive_ammo;
-		pointer<uint64_t> fire_ammo;
-		pointer<uint64_t> explosive_melee;
-		pointer<uint64_t> super_jump;
+		// pointer<uint64_t> explosive_ammo;
+		// pointer<uint64_t> fire_ammo;
+		// pointer<uint64_t> explosive_melee;
+		// pointer<uint64_t> super_jump;
 		pointer<uint64_t> player_aim;
+		HWND m_hwnd;
 		
 	};
 

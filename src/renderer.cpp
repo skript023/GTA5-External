@@ -137,7 +137,8 @@ namespace ellohim
 			TempRect.left = TempPoint.x;
 			TempRect.top = TempPoint.y;
 			ImGuiIO& io = ImGui::GetIO();
-			// io.ImeWindowHandle = Process::Hwnd;
+			ImGuiViewport viewport;
+			viewport.PlatformHandleRaw = Process::Hwnd;
 
 			if (TempRect.left != OldRect.left || TempRect.right != OldRect.right || TempRect.top != OldRect.top || TempRect.bottom != OldRect.bottom)
 			{
@@ -160,7 +161,7 @@ namespace ellohim
 
 		if (FAILED(Direct3DCreate9Ex(D3D_SDK_VERSION, &DirectX9Interface::Direct3D9)))
 		{
-			return;
+			throw std::runtime_error("DirectX 9 is not found");
 		}
 
 		D3DPRESENT_PARAMETERS Params = { 0 };
@@ -180,7 +181,7 @@ namespace ellohim
 		if (FAILED(DirectX9Interface::Direct3D9->CreateDeviceEx(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, OverlayWindow::Hwnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &Params, 0, &DirectX9Interface::pDevice)))
 		{
 			DirectX9Interface::Direct3D9->Release();
-			return;
+			throw std::runtime_error("Unable create device directX 9");
 		}
 
 		ImGui::CreateContext();
@@ -310,6 +311,7 @@ namespace ellohim
 		{
 			DWORD ForegroundWindowProcessID;
 			GetWindowThreadProcessId(GetForegroundWindow(), &ForegroundWindowProcessID);
+			
 			if (functions::GetProcessId(TargetProcess) == ForegroundWindowProcessID)
 			{
 				Process::ID = GetCurrentProcessId();
@@ -336,6 +338,8 @@ namespace ellohim
 				char TempPath[MAX_PATH];
 				GetModuleFileNameEx(Process::Handle, NULL, TempPath, sizeof(TempPath));
 				Process::Path = TempPath;
+
+				LOG(INFO) << "Process found";
 
 				WindowFocus = true;
 			}

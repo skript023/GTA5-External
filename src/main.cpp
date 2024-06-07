@@ -57,10 +57,7 @@ int main()
 
 	auto fiber_pool_instance = std::make_unique<fiber_pool>(10);
 	LOG(INFO) << "Fiber pool initialized.";
-
-	auto fiber_pool = std::make_unique<thread_pool>();
-	LOG(INFO) << "Thread pool initialized.";
-
+	
 	auto thread_pool_instance = std::make_unique<thread_pool>();
 	LOG(INFO) << "Thread pool initialized.";
 
@@ -72,6 +69,8 @@ int main()
 
 	g_script_mgr.add_script(std::make_unique<script>(&features::script_func));
 	LOG(INFO) << "Scripts registered.";
+
+	LOG(INFO) << "Program is running";
 
 	while (g_running)
 	{

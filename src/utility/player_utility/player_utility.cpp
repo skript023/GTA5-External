@@ -65,7 +65,7 @@ namespace ellohim::player
 	{
 		if (auto ped = utility::get_player_ped(Player))
 		{
-			g_fiber_pool->queue_job([=] {
+			g_fiber_pool->queue_job([&] {
 				if (coords.x == 0.0 && coords.y == 0.0 && coords.z == 0.0) return;
 
 				ExtInterface m_ped(ped, g_proxy->m_ped_proxy.get());
@@ -75,6 +75,7 @@ namespace ellohim::player
 					auto veh = (uintptr_t)m_ped.get(&m_ped.proxy->m_last_vehicle);
 
 					ExtInterface m_veh(veh, g_proxy->m_vehicle_proxy.get());
+					g_process->write(g_pointers->m_player_gravity, NAN);
 
 					auto nav = (uintptr_t)m_veh.get(&m_veh.proxy->m_navigation);
 					ExtInterface m_nav(veh, g_proxy->m_navigation.get());
@@ -89,6 +90,7 @@ namespace ellohim::player
 					script::get_current()->yield(250ms);
 
 					m_veh.clear_bit(&m_veh.proxy->m_stop_vehicle, 0);
+					g_process->write(g_pointers->m_player_gravity, -9.8f);
 				}
 				else
 				{
@@ -115,10 +117,11 @@ namespace ellohim::player
 	void teleport_to_marker()
 	{
 		g_fiber_pool->queue_job([] {
-			float Heights[]{ 200.0f, 150.0f, 100.0f, 50.0f, 1050.0f, 900.0f, 850.0f, 800.0f, 750.0f, 700.0f, 650.0f, 600.0f, 550.0f, 500.0f, 450.0f, 400.0f, 350.0f, 300.0f, 250.0f, 0.0f };
+			std::vector<float> height = { 200.0f, 150.0f, 100.0f, 50.0f, 1050.0f, 900.0f, 850.0f, 800.0f, 750.0f, 700.0f, 650.0f, 600.0f, 550.0f, 500.0f, 450.0f, 400.0f, 350.0f, 300.0f, 250.0f, 0.0f };
 			rage::vector2 v2 = g_process->read<rage::vector2>(g_pointers->m_waypoint_2);
 			float high = 1100.0f;
 			float ground = 0.0f;
+			int i = 0;
 
 			ExtInterface m_ped(utility::get_local_ped(), g_proxy->m_ped_proxy.get());
 			auto navigation = m_ped.get(&m_ped.proxy->m_navigation);
@@ -127,40 +130,37 @@ namespace ellohim::player
 			rage::vector3 v3(v2.x, v2.y, high);
 			set_player_coords(PLAYER::PLAYER_ID(), v3);
 
-			script::get_current()->yield(100ms);
+			script::get_current()->yield(1000ms);
 
-			for (int i = 0; i <= _ARRAYSIZE(Heights); ++i)
+			while (true)
 			{
 				LOG(INFO) << "Begin Ground : " << *g_pointers->m_ground_coord;
-				if (!utility::is_float_equal(*g_pointers->m_ground_coord, 0.0f))
-				{
-					for (int j = 0; j <= _ARRAYSIZE(Heights); j++)
-					{
-						if (!utility::is_float_equal(*g_pointers->m_ground_coord, 0.0f))
-						{
-							set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, *g_pointers->m_ground_coord + 1.2f });
-							LOG(INFO) << "Ground : " << *g_pointers->m_ground_coord;
-						}
-						else
-						{
-							set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, Heights[j] });
-							LOG(INFO) << "Search Z Coords";
-						}
-						script::get_current()->yield();
-					}
 
-					set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, *g_pointers->m_ground_coord + 1.2f });
-					LOG(INFO) << "Finished";
+				if (!utility::is_float_equal(ground, 0.0f))
+				{
+					set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, ground + 1.0f });
+
+					script::get_current()->yield(1000ms);
+
+					set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, ground + 1.0f });
+
+					ground = 0.0f;
+					
+					LOG(INFO) << *g_pointers->m_ground_coord << " Finished";
 					break;
 				}
 				else
 				{
-					if (i > 18) i = 0;
-					high = Heights[i];
+					if (i > height.size()) i = 0;
+					high = height[i];
 					set_player_coords(PLAYER::PLAYER_ID(), { v2.x, v2.y, high });
-					LOG(INFO) << "Search Z Coords";
+					LOG(INFO) << "Search Z Coords " << height[i];
 				}
-				script::get_current()->yield();
+
+				ground = *g_pointers->m_ground_coord;
+				i++;
+
+				script::get_current()->yield(100ms);
 			}
 		});
 	}

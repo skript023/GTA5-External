@@ -70,9 +70,9 @@ namespace ellohim::utility
 		return NULL;
 	}
 
-	inline bool is_float_equal(float a, float b, float epsilon = FLT_EPSILON)
+	inline bool is_float_equal(float a, float b, float epsilon  = 1e-6)
 	{
-		return (fabs(a - b) <= epsilon * std::max(fabs(a), fabs(b)));
+		return fabs(a - b) < epsilon;
 	}
 }
 
